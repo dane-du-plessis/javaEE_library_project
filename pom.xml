@@ -40,7 +40,6 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
@@ -66,6 +65,8 @@
             <version>${version.arquillian.wildfly}</version>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
