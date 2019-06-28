@@ -19,6 +19,7 @@ public class Book {
     @Column(name = "unit_cost")
     private Float unitCost;
 
+    @Column(length = 50)
     private String isbn;
 
     @Column(name = "publication_date")
@@ -31,7 +32,22 @@ public class Book {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Enumerated
     private Language language;
+
+    public Book() {
+    }
+
+    public Book(String title, String description, Float unitCost, String isbn, Date publicationDate, Integer nbOfPages, String imageUrl, Language language) {
+        this.title = title;
+        this.description = description;
+        this.unitCost = unitCost;
+        this.isbn = isbn;
+        this.publicationDate = publicationDate;
+        this.nbOfPages = nbOfPages;
+        this.imageUrl = imageUrl;
+        this.language = language;
+    }
 
     public Long getId() {
         return id;
