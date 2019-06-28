@@ -12,20 +12,25 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<!--        TEST-->
+        <version.java>1.8</version.java>
+        <version.javaee>7.0</version.javaee>
+        <!-- Test-->
         <version.junit>4.12</version.junit>
-        <version.arquillian>1.1.13.5</version.arquillian>
-        <version.arquillian.wildfly>2.0.2.Final</version.arquillian.wildfly>
-        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+        <version.arquillian>1.4.1.Final</version.arquillian>
+        <version.arquillian.wildfly>2.1.1.Final</version.arquillian.wildfly>
         <!-- Plugins-->
-        <!-- <version.surefire.plugin>2.19.1</version.surefire.plugin>-->
+        <version.assembly.plugin>3.1.1</version.assembly.plugin>
+        <version.compiler.plugin>3.8.0</version.compiler.plugin>
+        <version.dependency.plugin>3.1.1</version.dependency.plugin>
+        <version.surefire.plugin>2.22.1</version.surefire.plugin>
+        <version.war.plugin>3.2.2</version.war.plugin>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.arquillian</groupId>
-                <artifactId>arquillian-universe</artifactId>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
                 <version>${version.arquillian}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -37,9 +42,10 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
+            <version>${version.javaee}</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
@@ -48,15 +54,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.arquillian.universe</groupId>
-            <artifactId>arquillian-junit</artifactId>
-            <scope>test</scope>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap</groupId>
-            <artifactId>shrinkwrap-api</artifactId>
-            <version>${version.shrinkwrap}</version>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -65,19 +64,43 @@
             <version>${version.arquillian.wildfly}</version>
             <scope>test</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>bookstore-back</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.surefire.plugin}</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <systemPropertyVariables>
+                        <arquillian.launch>arquillian-wildfly-remote</arquillian.launch>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+                <configuration>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
@@ -86,7 +109,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>${version.war.plugin}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -94,7 +117,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <version>${version.dependency.plugin}</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>
@@ -108,13 +131,23 @@
                                 <artifactItem>
                                     <groupId>javax</groupId>
                                     <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>7.0</version>
+                                    <version>${version.javaee}</version>
                                     <type>jar</type>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${version.assembly.plugin}</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>src</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
