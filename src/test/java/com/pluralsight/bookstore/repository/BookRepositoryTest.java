@@ -91,4 +91,83 @@ public class BookRepositoryTest {
 //    public void mustFail() {
 //        assertEquals(1, 0);
 //    }
+
+    @Test(expected = Exception.class)
+    @InSequence(8)
+    public void shouldFailCreatingNullBook() {
+        bookRepository.create(null);
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(9)
+    public void shouldFailCreatingNullTitle() {
+        Book book = new Book(
+                null,
+                "A really cool book, this is",
+                1f,
+                "123654789",
+                new Date(),
+                123,
+                "http://someimage2",
+                Language.ENGLISH
+        );
+        bookRepository.create(book);
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(10)
+    public void shouldFailWithZeroCost() {
+        Book book = new Book(
+                "Le Beeg Book",
+                "A really cool book, this is",
+                0f,
+                "123654789",
+                new Date(),
+                123,
+                "http://someimage2",
+                Language.ENGLISH
+        );
+        bookRepository.create(book);
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(11)
+    public void shouldFailWithNulllIsbn() {
+        Book book = new Book(
+                "Le Beeg Book",
+                "A really cool book, this is",
+                100f,
+                null,
+                new Date(),
+                123,
+                "http://someimage2",
+                Language.ENGLISH
+        );
+        bookRepository.create(book);
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(12)
+    public void shouldFailToFindByNullId() {
+        bookRepository.find(null);
+    }
+
+    @Test
+    @InSequence(13)
+    public void shouldNotFindByUnknownId() {
+        assertNull(bookRepository.find(999999l));
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(14)
+    public void shouldFailDeleteByNull() {
+        bookRepository.delete(null);
+    }
+
+    @Test(expected = Exception.class)
+    @InSequence(15)
+    public void shouldFailToDeleteUnknownId() {
+        bookRepository.delete(9999999l);
+    }
+
 }
